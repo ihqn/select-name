@@ -129,18 +129,7 @@
     var saveop = {};//用于存取操作过的内容
 
     $('.j-select-person').each(function(){
-        var that = $(this);
-
-        saveop[ that.attr('name') ] = {}
-
-        if ( that.val() ){
-            var val = $('input[name="'+ that.attr('name') +'_mid"]').val( );
-            saveop[ that.attr('name') ] = {[ val ]: val }
-        }else if ( that.prevAll('.j-list-mb').length > 0 ){
-            that.prevAll('.j-list-mb').each(function(index){
-                saveop[ that.attr('name') ][$('input',this).val()] = $('input',this).val()
-            })
-        }
+        saveop[ $(this).attr('name') ] = {}
     }).click(function(e){
         e.stopPropagation()
 
