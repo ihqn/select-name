@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
+  <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+  <style>
+  .closest{ width: 20%; margin-top: 20px;}
+  .class-menu{position: fixed;right:10%; background-color: #ffffff;padding: 28px;z-index: 1; min-width: 200px;  min-height: 280px;  display: none; border: 1px solid #cccbcb;height: 400px;overflow-y: auto;width: 200px; }
+  .class-menu::-webkit-scrollbar,.subject_list::-webkit-scrollbar{ width: 10px;background: #d6d6d6; border-radius: 10px;}
+  .class-menu::-webkit-scrollbar-track,.subject_list::-webkit-scrollbar {background:  #d6d6d6 border-radius: 10px;    }
+  .close-class{ right: 10px;top: 10px;position:absolute;font-size: 15px;color: #a7a7a7; cursor: pointer;}
+  .class-menu ol,.class-menu ul{margin: 0px;padding: 0px;}
+  .class-menu ul{ margin-bottom: 10px; margin-left: 15px;}
+  .class-menu li{ cursor: pointer; position: relative; }
+  .class-menu li label{font-weight: normal;}
+  .class-menu li label:hover{color: #f92323;cursor: pointer;}
+  .class-menu ol>li>input{position: absolute;left: -15px;top: -1px;}
+  .hide{ display: none; }
+  .list-inp{position: relative;border:1px solid #ddd;padding:4px;color: #333; float:left; margin-right: 15px; margin-bottom: 7px;}
+  .list-inp span{position: absolute;right: -5px;top: -9px;font-size: 12px;cursor: pointer;border-radius: 100%;background-color: #d0d0d0;padding: 0px 4px;}
+  .list-inp span:hover{background-color: #ff9c9c;color: #fff;}
+  .edit{ cursor: pointer; color: blue; float: left; }
+  </style>
+</head>
+
+<body>
+  <div class="j-closest closest"><input type="text" name="host" placeholder="点击选择" class="j-select-person" readonly="1"></div>
+  <div class="j-closest closest">
+    <span class="j-select-person edit" name="participants[]">编辑</span>
+  </div>
+
+  <div class="class-menu j-class-menu">
+      <span class="j-close-class close-class ">X</span>
+      <ol class="j-menu-layer">
+      </ol>
+  </div>
+
+<script>
+;(function(){
+    "use strict";
+    var data = [{"group_id":"10","group_name":"\u603b\u529e","child":[{"member_name":"TK","member_id":"15","member_truename":"\u9ec4\u5168\u5e86","group_id":"10","format_name":"TK ( \u9ec4\u5168\u5e86 ) "},{"member_name":"\u56e2\u961f","member_id":"49","member_truename":"","group_id":"10","format_name":"\u56e2\u961f"}]},{"group_id":"4","group_name":"\u9500\u552e","child":[{"member_name":"\u62b9\u8336","member_id":"68","member_truename":"\u5927\u9053","group_id":"4","format_name":"\u62b9\u8336 ( \u5927\u9053 ) "}]},{"group_id":"6","group_name":"\u884c\u653f","child":[{"member_name":"\u884c\u653f\u6d4b\u8bd5","member_id":"72","member_truename":"\u884c\u653f","group_id":"6","format_name":"\u884c\u653f\u6d4b\u8bd5 ( \u884c\u653f ) "}]},{"group_id":"7","group_name":"\u76d1\u63a7\u7ec4","child":[{"member_name":"\u84dd\u5929","member_id":"9","member_truename":"","group_id":"7","format_name":"\u84dd\u5929"}]},{"group_id":"16","group_name":"\u4eba\u529b\u884c\u653f","child":[{"member_name":"\u8309\u8389","member_id":"18","member_truename":"","group_id":"16","format_name":"\u8309\u8389"},{"member_name":"\u6e05\u98ce","member_id":"70","member_truename":"\u6e05\u98ce","group_id":"16","format_name":"\u6e05\u98ce ( \u6e05\u98ce ) "}]},{"group_id":"1","group_name":"R1\u6280\u672f\u90e8","child":[{"member_name":"\u6797\u5b50","member_id":"30","member_truename":"","group_id":"1","format_name":"\u6797\u5b50"},{"member_name":"\u732b\u54c6\u54e9","member_id":"31","member_truename":"","group_id":"1","format_name":"\u732b\u54c6\u54e9"},{"member_name":"\u7530\u4e03","member_id":"38","member_truename":"\u7530\u4e03","group_id":"1","format_name":"\u7530\u4e03 ( \u7530\u4e03 ) "},{"member_name":"\u6de1\u84dd","member_id":"50","member_truename":"","group_id":"1","format_name":"\u6de1\u84dd"},{"member_name":"\u6280\u672f\u90e8","member_id":"1","member_truename":"tttttt","group_id":"1","format_name":"\u6280\u672f\u90e8 ( tttttt ) "},{"member_name":"\u51b0\u6cb3","member_id":"16","member_truename":"\u5f20","group_id":"1","format_name":"\u51b0\u6cb3 ( \u5f20 ) "}]},{"group_id":"2","group_name":"R2\u4ea7\u54c1\u90e8","child":[{"member_name":"\u897f\u7c73","member_id":"56","member_truename":"\u897f\u7c73","group_id":"2","format_name":"\u897f\u7c73 ( \u897f\u7c73 ) "},{"member_name":"test","member_id":"71","member_truename":"test","group_id":"2","format_name":"test ( test ) "},{"member_name":"\u5fc6\u6614","member_id":"6","member_truename":"","group_id":"2","format_name":"\u5fc6\u6614"},{"member_name":"\u85af\u6761","member_id":"37","member_truename":"\u9648\u51ef\u4e00","group_id":"2","format_name":"\u85af\u6761 ( \u9648\u51ef\u4e00 ) "}]},{"group_id":"9","group_name":"\u5a5a\u4eb2","child":[{"member_name":"\u8c46\u8c46","member_id":"3","member_truename":"","group_id":"9","format_name":"\u8c46\u8c46"},{"member_name":"\u51b0\u5fc3","member_id":"10","member_truename":"\u8d22\u52a12","group_id":"9","format_name":"\u51b0\u5fc3 ( \u8d22\u52a12 ) "}]},{"group_id":"11","group_name":"\u623f\u88c5\u8f66","child":[{"member_name":"\u96f6\u96f6\u7a7a","member_id":"12","member_truename":"","group_id":"11","format_name":"\u96f6\u96f6\u7a7a"}]},{"group_id":"12","group_name":"\u65f6\u4e8b\u5f00\u8bb2","child":[{"member_name":"\u76d7\u4ed4","member_id":"2","member_truename":"","group_id":"12","format_name":"\u76d7\u4ed4"}]},{"group_id":"17","group_name":"R2 UED\u89c6\u89c9","child":[{"member_name":"\u5343\u7275","member_id":"34","member_truename":"","group_id":"17","format_name":"\u5343\u7275"},{"member_name":"\u5305\u5b50","member_id":"36","member_truename":"\u5566\u5566\u5566","group_id":"17","format_name":"\u5305\u5b50 ( \u5566\u5566\u5566 ) "},{"member_name":"\u9ec4\u9e42","member_id":"62","member_truename":"","group_id":"17","format_name":"\u9ec4\u9e42"},{"member_name":"\u6c34\u8349","member_id":"63","member_truename":"","group_id":"17","format_name":"\u6c34\u8349"},{"member_name":"\u7fbd\u6247","member_id":"64","member_truename":"","group_id":"17","format_name":"\u7fbd\u6247"}]},{"group_id":"21","group_name":"\u6d4b\u8bd5-\u90e8","child":[{"member_name":"\u9500\u552e\u5e10\u53f7","member_id":"69","member_truename":"\u6d4b\u8bd5","group_id":"21","format_name":"\u9500\u552e\u5e10\u53f7 ( \u6d4b\u8bd5 ) "},{"member_name":"\u6d4b\u8bd5-2","member_id":"53","member_truename":"\u963f\u8428\u5fb7","group_id":"21","format_name":"\u6d4b\u8bd5-2 ( \u963f\u8428\u5fb7 ) "}]}];
+
+    var create = {
+        data: data,
+        html: '',
+        checkArray: [],//每次渲染取上次选择内容
+        ismore: false,//判断是否多选
+        getdata: function (url, cb) {
+            var _this = this;
+            $.get(url, function (data) {
+                _this.data = data.data
+                if ( cb ) cb()
+            })
+        },
+        ifgroud: function(cb){
+            var _this = this
+                ,data = _this.data;
+
+            data.forEach(function (val) {
+                if (val.child && val.child.length > 0) {
+                    _this.html += '<li data-id="' + val.group_id + '"><span class="sp-icon spicon-folder"></span>' + val.group_name;
+                    _this.html += '<ul class="hide">';
+
+                    var checkbox = 0
+
+                    val.child.forEach(function(smval, index){
+
+                        var c = '';
+
+                        if ( _this.checkArray.indexOf( smval.member_id ) != '-1' ){
+                            c = 'checked = checked'
+                            checkbox++
+                        }
+
+                        _this.html += '<li data-id="'+ smval.member_id +'" data-name="'+ smval.member_name +'"><label>'+
+                        (_this.ismore? '<input type="checkbox" '+ c +' />' :'')
+                        +'<span class="sp-icon spicon-file"></span>' + smval.format_name +'</label></li>';
+                    })
+                    _this.html += '</ul>';
+                    checkbox = ( checkbox == val.child.length ) ? 'checked = checked' : ''
+                    _this.html += _this.ismore ? '<input type="checkbox" '+ checkbox +' />' : '';
+                    _this.html += '</li>';
+                }
+            })
+
+            _this.createHtml(cb)
+        },
+        createHtml: function ( cb ) {
+            var _this = this;
+
+            $('.j-menu-layer').html(this.html).off('click', 'li').on('click', 'li', function (e) {
+                e.stopPropagation()
+
+                if ($(this).has('ul').length > 0){
+                    $(this).toggleClass('active-layer').children("ul").toggleClass('hide')
+                }else{
+                    if( !_this.ismore && cb)
+                        cb( $(this) )
+                }
+            }).off('click', 'input[type="checkbox"]').on('click', 'input[type="checkbox"]', function(e){
+                e.stopPropagation()
+
+                if ( $(this).prevAll('ul').length > 0  ){
+                    $('input[type="checkbox"]', $(this).prevAll('ul') ).prop('checked', !$(this).prop('checked') ).trigger('click')
+                }else{
+                    if( cb ) {
+                        cb( $(this).closest('li'), $(this).prop('checked') )
+                    }
+                }
+            })
+
+            this.html = ''
+        },
+        init: function(url, ismore, cb){//避免多次请求重复内容
+            this.ismore = ismore;
+
+            if ( this.data.length > 0 ) {
+                this.ifgroud(cb);
+            }else {
+                var _this = this;
+                this.getdata( url, function(){
+                    _this.ifgroud(cb);
+                })
+            }
+        }
+    }
+
+    var saveop = {};//用于存取操作过的内容
+
+    $('.j-select-person').each(function(){
+        var that = $(this);
+
+        saveop[ that.attr('name') ] = {}
+
+        if ( that.val() ){
+            var val = $('input[name="'+ that.attr('name') +'_mid"]').val( );
+            saveop[ that.attr('name') ] = {[ val ]: val }
+        }else if ( that.prevAll('.j-list-mb').length > 0 ){
+            that.prevAll('.j-list-mb').each(function(index){
+                saveop[ that.attr('name') ][$('input',this).val()] = $('input',this).val()
+            })
+        }
+    }).click(function(e){
+        e.stopPropagation()
+
+        var that = $(this)
+            ,top = that.offset().top
+            ,left = that.closest('.j-closest').offset().left
+            ,name = that.attr('name')
+            ,ismore = /\[\]/g.test( name );
+
+        $('.j-class-menu').css({
+            'top': Math.min( Math.max(top, top - $('.j-class-menu').height() / 2 ), $(window).height() - $('.j-class-menu').height()),
+            'left': left + that.closest('.j-closest').outerWidth()
+        }).show()
+
+        create.checkArray = Object.keys(saveop[name])
+        create.init('/grouplist', ismore , function(ele, ischeck){
+
+            var id = ele.attr('data-id');
+
+            if ( !ismore ){//单选和多选分开处理
+                that.val( ele.attr('data-name') ) && $('input[name="'+ name +'_mid"]').val( id ) && $('.j-close-class').trigger('click')
+                saveop[name] = { [id]  : id}
+            } else {
+                if ( ischeck ){
+                    if ( id in saveop[name] ) return;
+
+                    var input = $('<div class="list-inp j-list-mb"><input type="hidden" name="'+ name +'" value="'+ id +'">'+ ele.attr('data-name') +'<span>X</span></div>').on('click', 'span', function(){
+                        input.remove()
+                        delete saveop[name][id]
+                    })
+
+                    that.before(input)
+                    saveop[name][ ele.attr('data-id') ] = id
+                }else{
+                    that.prevAll('.j-list-mb').each(function(index){//操作dom节点
+                        if ( $('input', this).val() == id ){
+                            $(this).remove()
+                        }
+                    })
+                    delete saveop[name][id]
+                }
+            }
+        })
+    })
+
+    $('.j-close-class').click(function (e) {
+        e.stopPropagation()
+        $('.j-class-menu').hide()
+    })
+})()
+</script>
+</body>
+</html>
